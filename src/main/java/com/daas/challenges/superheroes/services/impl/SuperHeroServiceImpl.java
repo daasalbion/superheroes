@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
+import com.daas.challenges.superheroes.entities.SuperHero;
 import com.daas.challenges.superheroes.repositories.SuperHeroRepository;
 import com.daas.challenges.superheroes.services.SuperHeroService;
 
@@ -41,5 +42,25 @@ public class SuperHeroServiceImpl implements SuperHeroService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
                         id)));
     }
+
+    @Override
+    public SuperHeroDTO create(SuperHeroDTO superHeroDTO) {
+        SuperHero newSuperHero = new SuperHero(superHeroDTO.getName(), superHeroDTO.getPower());
+        SuperHero savedSuperHero = superHeroesRepository.save(newSuperHero);
+        return new SuperHeroDTO(savedSuperHero);
+    }
+
+    @Override
+    public SuperHeroDTO update(Integer id, SuperHeroDTO superHeroDTO) {
+        SuperHero savedSuperHero = superHeroesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
+                id)));
+        SuperHero superHero = new SuperHero(savedSuperHero.getId(), superHeroDTO.getName(),
+                superHeroDTO.getPower(), superHeroDTO.getStatus());
+        SuperHero updatedSuperHero = superHeroesRepository.save(superHero);
+
+        return new SuperHeroDTO(updatedSuperHero);
+    }
+
 
 }

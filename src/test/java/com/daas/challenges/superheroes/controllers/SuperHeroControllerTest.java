@@ -1,6 +1,7 @@
 package com.daas.challenges.superheroes.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -8,7 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
+import com.daas.challenges.superheroes.entities.SuperHero;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @SpringBootTest
@@ -17,6 +24,9 @@ class SuperHeroControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void shouldReturnAllSuperHeroes() throws Exception {
@@ -52,4 +62,61 @@ class SuperHeroControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldCreateNewSuperHero() throws Exception {
+        SuperHero superHero = new SuperHero("test", "test");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(post("/superheroes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superHeroDTO)))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void shouldReturnErrorForIncorrectRequest() throws Exception {
+        SuperHero superHero = new SuperHero(null, "test");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(post("/superheroes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superHeroDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldUpdateSuperHero() throws Exception {
+        SuperHero superHero = new SuperHero(1, "test", "test", "ACTIVE");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/superheroes/{id}", superHeroDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superHeroDTO)))
+                .andDo(print())
+                .andExpect(status().isAccepted());
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenUpdate() throws Exception {
+        SuperHero superHero = new SuperHero(1000, "test", "test", "ACTIVE");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/superheroes/{id}", superHeroDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superHeroDTO)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenUpdate() throws Exception {
+        SuperHero superHero = new SuperHero(1, null, "test", "ACTIVE");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/superheroes/{id}", superHeroDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superHeroDTO)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+
 }

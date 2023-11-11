@@ -25,9 +25,15 @@ public class SuperHero {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public SuperHero(String name, String power, String status) {
+    public SuperHero(Integer id, String name, String power, String status) {
+        this.id = id;
         this.name = name;
         this.power = power;
         this.status = status;
     }
+
+    public SuperHero(String name, String power) {
+        this(null, name, power, "Active");
+    }
+
 }
