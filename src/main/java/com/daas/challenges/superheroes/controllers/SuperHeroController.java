@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.daas.challenges.superheroes.annotations.ExecutionTimeLogger;
 import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
 import com.daas.challenges.superheroes.services.SuperHeroService;
 
@@ -31,6 +32,7 @@ public class SuperHeroController {
     }
 
     @GetMapping
+    @ExecutionTimeLogger
     public List<SuperHeroDTO> list(@RequestParam(required = false) Map<String, String> req) {
         if (req.isEmpty()) return superHeroService.getAll();
 
@@ -42,22 +44,26 @@ public class SuperHeroController {
     }
 
     @GetMapping("/{id}")
+    @ExecutionTimeLogger
     public SuperHeroDTO get(@PathVariable("id") Integer id) {
         return superHeroService.get(id);
     }
 
     @PostMapping
+    @ExecutionTimeLogger
     @ResponseStatus(HttpStatus.CREATED)
     public SuperHeroDTO create(@RequestBody @Valid SuperHeroDTO superHeroDTO) {
         return superHeroService.create(superHeroDTO);
     }
 
     @PutMapping("/{id}")
+    @ExecutionTimeLogger
     public SuperHeroDTO update(@PathVariable("id") Integer id, @RequestBody @Valid SuperHeroDTO superHeroDTO) {
         return superHeroService.update(id, superHeroDTO);
     }
 
     @DeleteMapping("/{id}")
+    @ExecutionTimeLogger
     public SuperHeroDTO delete(@PathVariable("id") Integer id) {
         return superHeroService.delete(id);
     }
