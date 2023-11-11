@@ -52,9 +52,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 
     @Override
     public SuperHeroDTO update(Integer id, SuperHeroDTO superHeroDTO) {
-        SuperHero savedSuperHero = superHeroesRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
-                id)));
+        SuperHero savedSuperHero = requiredSuperHero(id);
         SuperHero superHero = new SuperHero(savedSuperHero.getId(), superHeroDTO.getName(),
                 superHeroDTO.getPower(), superHeroDTO.getStatus());
         SuperHero updatedSuperHero = superHeroesRepository.save(superHero);
@@ -62,5 +60,18 @@ public class SuperHeroServiceImpl implements SuperHeroService {
         return new SuperHeroDTO(updatedSuperHero);
     }
 
+    @Override
+    public SuperHeroDTO delete(Integer id) {
+        SuperHero savedSuperHero = requiredSuperHero(id);
+        superHeroesRepository.delete(savedSuperHero);
+
+        return new SuperHeroDTO(savedSuperHero);
+    }
+
+    private SuperHero requiredSuperHero(Integer id) {
+        return superHeroesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
+                        id)));
+    }
 
 }

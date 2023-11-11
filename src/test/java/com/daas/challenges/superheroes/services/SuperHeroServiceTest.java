@@ -75,4 +75,18 @@ class SuperHeroServiceTest {
         Assertions.assertEquals(updatedSuperHero.getStatus(), superHeroDTOResponse.getStatus());
     }
 
+    @Test
+    void shouldDeleteOneSuperHero() {
+        SuperHero savedSuperHero = new SuperHero(1, "Test", "Test", "Active");
+        when(superHeroesRepository.findById(any())).thenReturn(Optional.of(savedSuperHero));
+        SuperHeroDTO deletedSuperHeroDTO = superHeroesService.delete(savedSuperHero.getId());
+        Assertions.assertEquals(savedSuperHero.getId(), deletedSuperHeroDTO.getId());
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenDelete() {
+        when(superHeroesRepository.findById(1)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> superHeroesService.delete(1)).isInstanceOf(EntityNotFoundException.class);
+    }
+
 }

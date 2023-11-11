@@ -118,5 +118,23 @@ class SuperHeroControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void shouldReturnDeleteOneSuperHero() throws Exception {
+        SuperHero superHero = new SuperHero(1, null, "test", "ACTIVE");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/superheroes/{id}", superHeroDTO.getId()))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenDelete() throws Exception {
+        SuperHero superHero = new SuperHero(1000, "test", "test", "ACTIVE");
+        SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/superheroes/{id}", superHeroDTO.getId()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
 
 }

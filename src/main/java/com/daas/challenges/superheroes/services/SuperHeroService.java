@@ -10,4 +10,5 @@ public interface SuperHeroService {
     SuperHeroDTO get(Integer id);
     SuperHeroDTO create(SuperHeroDTO superHeroDTO);
     SuperHeroDTO update(Integer id, SuperHeroDTO superHeroDTO);
+    SuperHeroDTO delete(Integer id);
 }
