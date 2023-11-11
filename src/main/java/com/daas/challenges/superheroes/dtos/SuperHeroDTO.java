@@ -4,13 +4,16 @@ import javax.validation.constraints.NotEmpty;
 
 import com.daas.challenges.superheroes.entities.SuperHero;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
 public class SuperHeroDTO {
     private final Integer id;
+    @Schema(example = "Superman")
     @NotEmpty(message = "name can't be empty")
     private final String name;
+    @Schema(example = "Strength")
     @NotEmpty(message = "power can't be empty")
     private final String power;
     private final String status;

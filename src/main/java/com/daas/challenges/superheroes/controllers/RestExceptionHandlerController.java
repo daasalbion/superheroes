@@ -1,7 +1,5 @@
 package com.daas.challenges.superheroes.controllers;
 
-import java.time.format.DateTimeParseException;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.http.HttpStatus;

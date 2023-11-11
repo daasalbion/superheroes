@@ -31,7 +31,7 @@ public class SuperHeroController {
     }
 
     @GetMapping
-    public List<SuperHeroDTO> getAll(@RequestParam(required = false) Map<String, String> req) {
+    public List<SuperHeroDTO> list(@RequestParam(required = false) Map<String, String> req) {
         if (req.isEmpty()) return superHeroService.getAll();
 
         if (req.containsKey(NAME_FILTER)) {
