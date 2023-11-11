@@ -1,5 +1,6 @@
 package com.daas.challenges.superheroes.entities;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,5 +19,8 @@ public class SuperHero {
     private Integer id;
     private String name;
     private String power;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

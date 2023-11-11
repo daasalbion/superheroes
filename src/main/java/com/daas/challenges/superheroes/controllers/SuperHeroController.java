@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daas.challenges.superheroes.entities.SuperHero;
+import com.daas.challenges.superheroes.services.SuperHeroDTO;
 import com.daas.challenges.superheroes.services.SuperHeroService;
 
 @RestController
@@ -25,7 +25,7 @@ public class SuperHeroController {
     }
 
     @GetMapping
-    public List<SuperHero> getAll() {
+    public List<SuperHeroDTO> getAll() {
         return superHeroService.getAll();
     }
 }
