@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
@@ -21,6 +22,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     }
 
     @Override
+    @CacheEvict(value="superheroes", allEntries=true)
     public List<SuperHeroDTO> getAll() {
         return superHeroesRepository.findAll().stream()
                 .map(SuperHeroDTO::new)
@@ -28,6 +30,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     }
 
     @Override
+    @CacheEvict(value="superheroesByName", allEntries=true)
     public List<SuperHeroDTO> findByName(String name) {
         return superHeroesRepository.findSuperHeroesByNameContainingIgnoreCase(name)
                 .stream()
