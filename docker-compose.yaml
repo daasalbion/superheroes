@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  superheroes:
+    build: ./
+    container_name: superheroes
+    image: superheroes:0.0.1-SNAPSHOT
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./logs:/logs
+      - "/etc/localtime:/etc/localtime:ro"
