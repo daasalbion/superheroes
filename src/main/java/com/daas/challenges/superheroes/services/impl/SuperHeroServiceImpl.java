@@ -32,4 +32,12 @@ public class SuperHeroServiceImpl implements SuperHeroService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Superhero with id = %s doesn't exists",
                         id)));
     }
+
+    @Override
+    public List<SuperHeroDTO> findByName(String name) {
+        return superHeroesRepository.findSuperHeroesByNameContainingIgnoreCase(name)
+                .stream()
+                .map(SuperHeroDTO::new)
+                .collect(Collectors.toList());
+    }
 }

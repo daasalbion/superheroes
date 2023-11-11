@@ -38,4 +38,11 @@ class SuperHeroControllerTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void shouldReturnSuperHeroesByName() throws Exception {
+        this.mockMvc.perform(get("/superheroes?name=man"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
