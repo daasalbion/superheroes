@@ -8,9 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "superheroes")
 public class SuperHero {
 
@@ -23,4 +25,9 @@ public class SuperHero {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public SuperHero(String name, String power, String status) {
+        this.name = name;
+        this.power = power;
+        this.status = status;
+    }
 }

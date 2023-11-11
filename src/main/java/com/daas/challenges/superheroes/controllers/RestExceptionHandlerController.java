@@ -2,6 +2,8 @@ package com.daas.challenges.superheroes.controllers;
 
 import java.time.format.DateTimeParseException;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,15 +15,15 @@ import com.daas.challenges.superheroes.dtos.ErrorResponse;
 @RestControllerAdvice
 public class RestExceptionHandlerController {
 
-    @ExceptionHandler(DateTimeParseException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleParameterNotReadable(DateTimeParseException ex) {
+    public ResponseEntity<ErrorResponse> handleParameterNotReadable(IllegalArgumentException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponse> handleAppException(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> handleAppException(EntityNotFoundException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 

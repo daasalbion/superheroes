@@ -45,4 +45,11 @@ class SuperHeroControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void shouldReturnBadRequest() throws Exception {
+        this.mockMvc.perform(get("/superheroes?badFilter=man"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -1,8 +1,7 @@
 package com.daas.challenges.superheroes.controllers;
 
-import static java.util.Objects.isNull;
-
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import com.daas.challenges.superheroes.services.SuperHeroService;
 @RequestMapping("/superheroes")
 public class SuperHeroController {
 
+    private static final String NAME_FILTER = "name";
     private final SuperHeroService superHeroService;
 
     public SuperHeroController(SuperHeroService superHeroService) {
@@ -24,12 +24,14 @@ public class SuperHeroController {
     }
 
     @GetMapping
-    public List<SuperHeroDTO> getAll(@RequestParam(value = "name", required = false) String name) {
-        if (isNull(name)) {
-            return superHeroService.getAll();
-        } else {
-            return superHeroService.findByName(name);
+    public List<SuperHeroDTO> getAll(@RequestParam(required = false) Map<String, String> req) {
+        if (req.isEmpty()) return superHeroService.getAll();
+
+        if (req.containsKey(NAME_FILTER)) {
+            return superHeroService.findByName(req.get(NAME_FILTER));
         }
+
+        throw new IllegalArgumentException(String.format("%s is the filter supported", NAME_FILTER));
     }
 
     @GetMapping("/{id}")
