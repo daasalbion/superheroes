@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
 import com.daas.challenges.superheroes.repositories.SuperHeroRepository;
 import com.daas.challenges.superheroes.services.impl.SuperHeroServiceImpl;
 

@@ -1,9 +1,7 @@
 package com.daas.challenges.superheroes.controllers;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -21,17 +19,23 @@ class SuperHeroControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/superheroes/greeting"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Hello, World")));
-    }
-
-    @Test
     void shouldReturnAllSuperHeroes() throws Exception {
         this.mockMvc.perform(get("/superheroes"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnOneSuperHero() throws Exception {
+        this.mockMvc.perform(get("/superheroes/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnNotFound() throws Exception {
+        this.mockMvc.perform(get("/superheroes/100"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

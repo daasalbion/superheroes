@@ -1,4 +1,6 @@
-package com.daas.challenges.superheroes.services;
+package com.daas.challenges.superheroes.dtos;
+
+import com.daas.challenges.superheroes.entities.SuperHero;
 
 import lombok.Getter;
 
@@ -14,6 +16,10 @@ public class SuperHeroDTO {
         this.name = name;
         this.power = power;
         this.status = status;
+    }
+
+    public SuperHeroDTO(SuperHero superHero) {
+        this(superHero.getId(), superHero.getName(), superHero.getPower(), superHero.getStatus());
     }
 
 }
