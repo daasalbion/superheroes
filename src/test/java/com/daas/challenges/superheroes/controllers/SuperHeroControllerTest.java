@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SuperHeroesControllerTest {
+class SuperHeroControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -26,5 +26,12 @@ class SuperHeroesControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello, World")));
+    }
+
+    @Test
+    void shouldReturnAllSuperHeroes() throws Exception {
+        this.mockMvc.perform(get("/superheroes"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
