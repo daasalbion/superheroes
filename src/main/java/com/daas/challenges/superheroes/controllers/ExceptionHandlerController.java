@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.daas.challenges.superheroes.dtos.ErrorResponse;
 
 @RestControllerAdvice
-public class RestExceptionHandlerController {
+public class ExceptionHandlerController {
 
     @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleParameterNotReadable(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

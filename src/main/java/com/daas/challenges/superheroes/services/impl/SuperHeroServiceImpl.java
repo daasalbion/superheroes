@@ -73,7 +73,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 
     private SuperHero requiredSuperHero(Integer id) {
         return superHeroesRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %d doesn't exists",
                         id)));
     }
 

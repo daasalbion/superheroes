@@ -24,7 +24,6 @@ import com.daas.challenges.superheroes.services.SuperHeroService;
 @RequestMapping("/superheroes")
 public class SuperHeroController {
 
-    private static final String NAME_FILTER = "name";
     private final SuperHeroService superHeroService;
 
     public SuperHeroController(SuperHeroService superHeroService) {
@@ -34,13 +33,7 @@ public class SuperHeroController {
     @GetMapping
     @ExecutionTimeLogger
     public List<SuperHeroDTO> list(@RequestParam(required = false) Map<String, String> req) {
-        if (req.isEmpty()) return superHeroService.getAll();
-
-        if (req.containsKey(NAME_FILTER)) {
-            return superHeroService.findByName(req.get(NAME_FILTER));
-        }
-
-        throw new IllegalArgumentException(String.format("%s is the filter supported", NAME_FILTER));
+        return superHeroService.list(req);
     }
 
     @GetMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.daas.challenges.superheroes.annotations;
+package com.daas.challenges.superheroes.configurations;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,7 +13,7 @@ public class LoggingInterceptor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    @Around("@annotation(ExecutionTimeLogger)")
+    @Around("@annotation(com.daas.challenges.superheroes.annotations.ExecutionTimeLogger)")
     public Object intercept(ProceedingJoinPoint joinPoint) throws Throwable {
         String caller = joinPoint.getTarget().getClass().getName();
         String method = joinPoint.getSignature().getName();
