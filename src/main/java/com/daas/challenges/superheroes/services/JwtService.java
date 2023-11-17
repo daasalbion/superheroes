@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public interface JwtProvider {
+public interface JwtService {
 
     String createToken(String username, Collection<? extends GrantedAuthority> roles);
 

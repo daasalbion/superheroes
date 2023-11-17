@@ -15,15 +15,15 @@ import org.springframework.stereotype.Service;
 import com.daas.challenges.superheroes.entities.User;
 import com.daas.challenges.superheroes.repositories.UserRepository;
 import com.daas.challenges.superheroes.services.CustomUserDetailsService;
-import com.daas.challenges.superheroes.services.JwtProvider;
+import com.daas.challenges.superheroes.services.JwtService;
 
 @Service
 public class UserDetailsServiceImpl implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtProvider;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, JwtProvider jwtProvider) {
+    public UserDetailsServiceImpl(UserRepository userRepository, JwtService jwtProvider) {
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
     }

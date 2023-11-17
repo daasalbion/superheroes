@@ -29,6 +29,7 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests()
                 .antMatchers("/users/signin").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 // Disallow everything else..
                 .anyRequest().authenticated();

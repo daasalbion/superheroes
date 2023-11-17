@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.daas.challenges.superheroes.services.JwtProvider;
+import com.daas.challenges.superheroes.services.JwtService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -20,14 +20,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
-public class JwtProviderImpl implements JwtProvider {
+public class JwtServiceImpl implements JwtService {
 
     private static final String ROLES_KEY = "roles";
 
     private final String secretKey;
     private final long validityInMilliseconds;
 
-    public JwtProviderImpl(@Value("${security.jwt.token.secret-key}") String secretKey,
+    public JwtServiceImpl(@Value("${security.jwt.token.secret-key}") String secretKey,
             @Value("${security.jwt.token.expiration}") long validityInMilliseconds) {
 
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());

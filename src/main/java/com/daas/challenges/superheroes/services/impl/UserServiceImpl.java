@@ -16,7 +16,7 @@ import com.daas.challenges.superheroes.exceptions.NotFoundException;
 import com.daas.challenges.superheroes.exceptions.IllegalArgumentException;
 import com.daas.challenges.superheroes.repositories.RoleRepository;
 import com.daas.challenges.superheroes.repositories.UserRepository;
-import com.daas.challenges.superheroes.services.JwtProvider;
+import com.daas.challenges.superheroes.services.JwtService;
 import com.daas.challenges.superheroes.services.UserService;
 
 @Service
@@ -25,17 +25,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager,
-            RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+            RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtProvider = jwtProvider;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),
                         loginDTO.getPassword()));
 
-        return jwtProvider.createToken(user.getUsername(), authentication.getAuthorities());
+        return jwtService.createToken(user.getUsername(), authentication.getAuthorities());
     }
 
     public UserDTO signup(UserDTO userDTO) {
