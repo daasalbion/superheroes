@@ -1,3 +1,5 @@
+![Coverage](.github/badges/jacoco.svg)
+
 # SuperHeroes App
 Servicio API RESTful de creación de superheroes.
 
