@@ -56,9 +56,8 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 
     @Override
     public SuperHeroDTO create(SuperHeroDTO superHeroDTO) {
-        boolean existsName = superHeroesRepository.existsByName(superHeroDTO.getName());
-        if (existsName) {
-            throw new IllegalArgumentException(String.format("Superhero with name = %s already exists",
+        if (superHeroesRepository.existsByName(superHeroDTO.getName())) {
+            throw new IllegalArgumentException(String.format("Superhero with name = '%s' already exists",
                     superHeroDTO.getName()));
         }
         SuperHero newSuperHero = new SuperHero(superHeroDTO.getName(), superHeroDTO.getPower());
