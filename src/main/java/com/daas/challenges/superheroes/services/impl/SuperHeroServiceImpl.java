@@ -1,14 +1,17 @@
 package com.daas.challenges.superheroes.services.impl;
 
+import static java.util.Objects.isNull;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
 import com.daas.challenges.superheroes.entities.SuperHero;
+import com.daas.challenges.superheroes.exceptions.NotFoundException;
+import com.daas.challenges.superheroes.exceptions.IllegalArgumentException;
 import com.daas.challenges.superheroes.repositories.SuperHeroRepository;
 import com.daas.challenges.superheroes.services.SuperHeroService;
 
@@ -22,15 +25,20 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     }
 
     @Override
-    @CacheEvict(value = "superheroes", allEntries = true)
+    public List<SuperHeroDTO> list(String name) {
+        if (isNull(name)) return getAll();
+
+        return findByName(name);
+    }
+
+    @Cacheable("superheroes")
     public List<SuperHeroDTO> getAll() {
         return superHeroesRepository.findAll().stream()
                 .map(SuperHeroDTO::new)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @CacheEvict(value = "superheroesByName", allEntries = true)
+    @Cacheable(value = "superheroesByName", key = "{#name}")
     public List<SuperHeroDTO> findByName(String name) {
         return superHeroesRepository.findSuperHeroesByNameContainingIgnoreCase(name)
                 .stream()
@@ -42,7 +50,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     public SuperHeroDTO get(Integer id) {
         return superHeroesRepository.findById(id)
                 .map(SuperHeroDTO::new)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %s doesn't exists",
+                .orElseThrow(() -> new NotFoundException(String.format("Superhero with id = %s doesn't exists",
                         id)));
     }
 
@@ -78,7 +86,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 
     private SuperHero requiredSuperHero(Integer id) {
         return superHeroesRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Superhero with id = %d doesn't exists",
+                .orElseThrow(() -> new NotFoundException(String.format("Superhero with id = %d doesn't exists",
                         id)));
     }
 

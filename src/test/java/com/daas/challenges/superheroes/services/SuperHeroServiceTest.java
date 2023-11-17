@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,8 @@ import org.junit.jupiter.api.Test;
 
 import com.daas.challenges.superheroes.dtos.SuperHeroDTO;
 import com.daas.challenges.superheroes.entities.SuperHero;
+import com.daas.challenges.superheroes.exceptions.IllegalArgumentException;
+import com.daas.challenges.superheroes.exceptions.NotFoundException;
 import com.daas.challenges.superheroes.repositories.SuperHeroRepository;
 import com.daas.challenges.superheroes.services.impl.SuperHeroServiceImpl;
 
@@ -30,7 +31,7 @@ class SuperHeroServiceTest {
 
     @Test
     void shouldReturnAllSuperHeroes() {
-        List<SuperHeroDTO> superHeroes = superHeroesService.getAll();
+        List<SuperHeroDTO> superHeroes = superHeroesService.list(null);
         Assertions.assertTrue(superHeroes.isEmpty());
     }
 
@@ -44,7 +45,7 @@ class SuperHeroServiceTest {
     @Test
     void shouldReturnNotFound() {
         when(superHeroesRepository.findById(1)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> superHeroesService.get(1)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> superHeroesService.get(1)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -52,7 +53,7 @@ class SuperHeroServiceTest {
         String name = "test";
         when(superHeroesRepository.findSuperHeroesByNameContainingIgnoreCase(name))
                 .thenReturn(List.of(new SuperHero("Test", "Test")));
-        Assertions.assertEquals(1, superHeroesService.findByName(name).size());
+        Assertions.assertEquals(1, superHeroesService.list(name).size());
     }
 
     @Test
@@ -65,9 +66,17 @@ class SuperHeroServiceTest {
     }
 
     @Test
+    void shouldReturnAlreadyCreated() {
+        SuperHero savedSuperHero = new SuperHero("Test", "Test");
+        SuperHeroDTO superHeroDTORequest = new SuperHeroDTO(savedSuperHero);
+        when(superHeroesRepository.existsByName(savedSuperHero.getName())).thenReturn(true);
+        assertThatThrownBy(() -> superHeroesService.create(superHeroDTORequest)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     void shouldUpdateOneSuperHero() {
-        SuperHero savedSuperHero = new SuperHero(1, "Test", "Test", "Active");
-        SuperHero updatedSuperHero = new SuperHero(1, "Test", "Test", "Inactive");
+        SuperHero savedSuperHero = new SuperHero(1, "Test", "Test", "ACTIVE");
+        SuperHero updatedSuperHero = new SuperHero(1, "Test", "Test", "INACTIVE");
         when(superHeroesRepository.findById(any())).thenReturn(Optional.of(savedSuperHero));
         when(superHeroesRepository.save(any())).thenReturn(updatedSuperHero);
         SuperHeroDTO superHeroDTORequest = new SuperHeroDTO(updatedSuperHero);
@@ -77,7 +86,7 @@ class SuperHeroServiceTest {
 
     @Test
     void shouldDeleteOneSuperHero() {
-        SuperHero savedSuperHero = new SuperHero(1, "Test", "Test", "Active");
+        SuperHero savedSuperHero = new SuperHero(1, "Test", "Test", "ACTIVE");
         when(superHeroesRepository.findById(any())).thenReturn(Optional.of(savedSuperHero));
         SuperHeroDTO deletedSuperHeroDTO = superHeroesService.delete(savedSuperHero.getId());
         Assertions.assertEquals(savedSuperHero.getId(), deletedSuperHeroDTO.getId());
@@ -86,7 +95,7 @@ class SuperHeroServiceTest {
     @Test
     void shouldReturnNotFoundWhenDelete() {
         when(superHeroesRepository.findById(1)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> superHeroesService.delete(1)).isInstanceOf(EntityNotFoundException.class);
+        assertThatThrownBy(() -> superHeroesService.delete(1)).isInstanceOf(NotFoundException.class);
     }
 
 }

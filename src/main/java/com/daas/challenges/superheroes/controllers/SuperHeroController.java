@@ -1,7 +1,6 @@
 package com.daas.challenges.superheroes.controllers;
 
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -32,8 +31,8 @@ public class SuperHeroController {
 
     @GetMapping
     @ExecutionTimeLogger
-    public List<SuperHeroDTO> list(@RequestParam(required = false) Map<String, String> req) {
-        return superHeroService.list(req);
+    public List<SuperHeroDTO> list(@RequestParam(required = false, value = "name") String name) {
+        return superHeroService.list(name);
     }
 
     @GetMapping("/{id}")

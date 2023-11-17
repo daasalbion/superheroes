@@ -57,15 +57,8 @@ class SuperHeroControllerTest {
     }
 
     @Test
-    void shouldReturnBadRequest() throws Exception {
-        this.mockMvc.perform(get("/superheroes?badFilter=man"))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void shouldCreateNewSuperHero() throws Exception {
-        SuperHero superHero = new SuperHero("test", "test");
+        SuperHero superHero = new SuperHero("new test", "test");
         SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
         this.mockMvc.perform(post("/superheroes")
                         .contentType(MediaType.APPLICATION_JSON)

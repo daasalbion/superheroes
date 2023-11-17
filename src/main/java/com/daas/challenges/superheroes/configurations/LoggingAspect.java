@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class LoggingInterceptor {
+public class LoggingAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 

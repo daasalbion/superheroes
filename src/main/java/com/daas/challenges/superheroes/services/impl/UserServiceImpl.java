@@ -1,7 +1,5 @@
 package com.daas.challenges.superheroes.services.impl;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +12,8 @@ import com.daas.challenges.superheroes.dtos.LoginDTO;
 import com.daas.challenges.superheroes.dtos.UserDTO;
 import com.daas.challenges.superheroes.entities.Role;
 import com.daas.challenges.superheroes.entities.User;
+import com.daas.challenges.superheroes.exceptions.NotFoundException;
+import com.daas.challenges.superheroes.exceptions.IllegalArgumentException;
 import com.daas.challenges.superheroes.repositories.RoleRepository;
 import com.daas.challenges.superheroes.repositories.UserRepository;
 import com.daas.challenges.superheroes.services.JwtProvider;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public String signIn(LoginDTO loginDTO) {
         LOGGER.info("New user attempting to sign in");
         User user = userRepository.findByUsername(loginDTO.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User with username = %s doesn't exists",
+                .orElseThrow(() -> new NotFoundException(String.format("User with username = %s doesn't exists",
                         loginDTO.getUsername())));
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),
@@ -59,11 +59,8 @@ public class UserServiceImpl implements UserService {
                             user.getUsername()));
                 });
         Role role = roleRepository.findByRoleName("ROLE_CSR").orElse(null);
-        User user = userRepository.save(new User(userDTO.getUsername(),
-                passwordEncoder.encode(userDTO.getPassword()),
-                role,
-                userDTO.getFirstName(),
-                userDTO.getLastName()));
+        User user = userRepository.save(new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()),
+                role, userDTO.getFirstName(), userDTO.getLastName()));
 
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName());
     }
