@@ -29,4 +29,19 @@ public class SuperHeroDTO {
         this(superHero.getId(), superHero.getName(), superHero.getPower(), superHero.getStatus());
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

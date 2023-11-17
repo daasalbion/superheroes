@@ -1,5 +1,5 @@
 # Start with a base image containing Java runtime
-FROM eclipse-temurin
+FROM eclipse-temurin:11
 
 # Add Maintainer Info
 LABEL maintainer="derlisarguello01@gmail.com"

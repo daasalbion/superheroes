@@ -22,7 +22,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     }
 
     @Override
-    @CacheEvict(value="superheroes", allEntries=true)
+    @CacheEvict(value = "superheroes", allEntries = true)
     public List<SuperHeroDTO> getAll() {
         return superHeroesRepository.findAll().stream()
                 .map(SuperHeroDTO::new)
@@ -30,7 +30,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
     }
 
     @Override
-    @CacheEvict(value="superheroesByName", allEntries=true)
+    @CacheEvict(value = "superheroesByName", allEntries = true)
     public List<SuperHeroDTO> findByName(String name) {
         return superHeroesRepository.findSuperHeroesByNameContainingIgnoreCase(name)
                 .stream()
@@ -48,6 +48,11 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 
     @Override
     public SuperHeroDTO create(SuperHeroDTO superHeroDTO) {
+        boolean existsName = superHeroesRepository.existsByName(superHeroDTO.getName());
+        if (existsName) {
+            throw new IllegalArgumentException(String.format("Superhero with name = %s already exists",
+                    superHeroDTO.getName()));
+        }
         SuperHero newSuperHero = new SuperHero(superHeroDTO.getName(), superHeroDTO.getPower());
         SuperHero savedSuperHero = superHeroesRepository.save(newSuperHero);
         return new SuperHeroDTO(savedSuperHero);

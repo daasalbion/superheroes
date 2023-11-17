@@ -9,4 +9,5 @@ import com.daas.challenges.superheroes.entities.SuperHero;
 public interface SuperHeroRepository extends JpaRepository<SuperHero, Integer> {
 
     List<SuperHero> findSuperHeroesByNameContainingIgnoreCase(String name);
+    boolean existsByName(String name);
 }

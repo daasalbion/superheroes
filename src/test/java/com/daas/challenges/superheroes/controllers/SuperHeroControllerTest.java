@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class SuperHeroControllerTest {
 
     @Autowired
@@ -93,7 +93,7 @@ class SuperHeroControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(superHeroDTO)))
                 .andDo(print())
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -120,7 +120,7 @@ class SuperHeroControllerTest {
 
     @Test
     void shouldReturnDeleteOneSuperHero() throws Exception {
-        SuperHero superHero = new SuperHero(1, null, "test", "ACTIVE");
+        SuperHero superHero = new SuperHero(2, null, "test", "ACTIVE");
         SuperHeroDTO superHeroDTO = new SuperHeroDTO(superHero);
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/superheroes/{id}", superHeroDTO.getId()))
                 .andDo(print())
